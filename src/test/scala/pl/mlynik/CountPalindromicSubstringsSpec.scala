@@ -29,11 +29,23 @@ class CountPalindromicSubstringsSpec
       }
     }
 
-    "very long palindrome should return -1" in {
+    "handle very long palindrome should return -1" in {
       val veryLongLotsOfPalindromes = Seq.fill(20000)("a").mkString
       val solution =
         Solution.countPalindromicSubstrings(veryLongLotsOfPalindromes)
       assert(solution == -1)
+    }
+
+    "handle 0 length strings" in {
+      val solution =
+        Solution.countPalindromicSubstrings("")
+      assert(solution == 0)
+    }
+
+    "handle 1 length strings" in {
+      val solution =
+        Solution.countPalindromicSubstrings("a")
+      assert(solution == 0)
     }
   }
 }
