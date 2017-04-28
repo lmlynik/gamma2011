@@ -47,5 +47,13 @@ class CountPalindromicSubstringsSpec
         Solution.countPalindromicSubstrings("a")
       assert(solution == 0)
     }
+
+    "handle mirrored string" in {
+      val mirroredString = PalindromeGenerator.generateMirrored(10000)
+
+      val solution =
+        Solution.countPalindromicSubstrings(mirroredString)
+      assert(solution == 10000)
+    }
   }
 }

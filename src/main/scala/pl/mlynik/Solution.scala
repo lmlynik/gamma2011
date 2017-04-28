@@ -1,14 +1,16 @@
 package pl.mlynik
 
 import scala.annotation.tailrec
+import scala.collection.mutable.ArrayBuffer
 
 object Solution {
+
   def countPalindromicSubstrings(string: String): Int = {
     val withBoundaries = string.mkString("^#", "#", "#$")
 
     val n = withBoundaries.length
 
-    val p = Array.fill(n)(0)
+    val p = ArrayBuffer.fill(n)(0)
 
     @tailrec
     def expandInitialLength(i: Int, pid: Int): Int =
@@ -31,7 +33,9 @@ object Solution {
                                    center: Int,
                                    rightEdge: Int,
                                    palindromicSliceCount: Int): Int =
-      if (i < n - 1) {
+      if (palindromicSliceCount > 100000000) {
+        -1
+      } else if (i < n - 1) {
         val iprime = center - (i - center)
 
         val pi =
@@ -40,25 +44,23 @@ object Solution {
           else
             0
 
-        val pid = expandInitialLength(i, pi)
-        val palindromicSliceCountD = palindromicSliceCount + pid / 2
-        if (palindromicSliceCountD > 100000000) {
-          -1
-        } else {
-          if (i + pid > rightEdge) {
-            countPalindromicSubstrings(i + 1,
-                                       center = i,
-                                       rightEdge = i + pid,
-                                       palindromicSliceCountD)
-          } else
-            countPalindromicSubstrings(i + 1,
-                                       center = center,
-                                       rightEdge = rightEdge,
-                                       palindromicSliceCountD)
-        }
+        p(i) = expandInitialLength(i, pi)
+        val palindromicSliceCountD = palindromicSliceCount + p(i) / 2
 
-      } else
+        if (i + p(i) > rightEdge) {
+          countPalindromicSubstrings(i + 1,
+                                     center = i,
+                                     rightEdge = i + p(i),
+                                     palindromicSliceCountD)
+        } else
+          countPalindromicSubstrings(i + 1,
+                                     center = center,
+                                     rightEdge = rightEdge,
+                                     palindromicSliceCountD)
+
+      } else {
         palindromicSliceCount
+      }
 
     countPalindromicSubstrings(1, 0, 0, 0)
   }
